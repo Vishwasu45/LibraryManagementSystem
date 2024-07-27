@@ -4,6 +4,7 @@ import com.library.system.books.Book;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Patron {
 
@@ -36,6 +37,12 @@ public class Patron {
         System.out.println(this.name + " has these books : ");
         this.borrowedBooks.forEach(borrowed -> System.out.println(borrowed.toString()));
         System.out.println("*************************");
+    }
+
+    public Optional<Book> getBookByIsbn(String isbn) {
+        return this.borrowedBooks.stream()
+                .filter(b -> b.getIsbn().equalsIgnoreCase(isbn))
+                .findFirst();
     }
 
     @Override

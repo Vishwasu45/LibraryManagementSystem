@@ -40,9 +40,16 @@ public class Main {
         //Add same book to library to increase the count
         bangalorePublicLibrary.addBook(new Book("Learn Java", "John", "1", 2010));
         bangalorePublicLibrary.addBook(new Book("Learn Java", "John", "1", 2010));
+        bangalorePublicLibrary.displayBooks();
 
         //Lend book to patron
+        System.out.println("Lending Book");
         bangalorePublicLibrary.lendBook("1", patron1);
         bangalorePublicLibrary.lendBook("1", patron2);
+        bangalorePublicLibrary.lendBook("1", patron2);
+
+        //Return book from patron
+        System.out.println("Returning Book");
+        bangalorePublicLibrary.returnBook(patron1.getBookByIsbn("1").get(), patron1);
     }
 }

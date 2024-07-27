@@ -83,6 +83,13 @@ public class Library {
         }
     }
 
+    public void returnBook(Book book, Patron patron) {
+        patron.returnBook(book);
+        this.bookMap.computeIfPresent(book.getIsbn(), (k, v) -> v + 1);
+        this.books.add(book);
+        displayBooks();
+    }
+
     private Optional<Book> findBookByIsbn(String isbn) {
         return this.books.stream()
                 .filter(b -> b.getIsbn().equalsIgnoreCase(isbn))
