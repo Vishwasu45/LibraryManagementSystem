@@ -10,22 +10,11 @@ public class Book {
 
     private int publicationYear;
 
-    private int countOfBooks;
-
-    public Book(String title, String author, String isbn, int publicationYear, int countOfBooks) {
+    public Book(String title, String author, String isbn, int publicationYear) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.publicationYear = publicationYear;
-        this.countOfBooks = countOfBooks;
-    }
-
-    public int getCountOfBooks() {
-        return countOfBooks;
-    }
-
-    public void setCountOfBooks(int countOfBooks) {
-        this.countOfBooks = countOfBooks;
     }
 
     public int getPublicationYear() {
@@ -67,7 +56,6 @@ public class Book {
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", isbn='" + isbn + '\'' +
-                ", publicationYear=" + publicationYear +
-                ", countOfBooks=" + countOfBooks;
+                ", publicationYear=" + publicationYear;
     }
 }
