@@ -38,9 +38,11 @@ public class Main {
         association.getLibraryList().forEach(Library::displayPatrons);
 
         //Add same book to library to increase the count
-
+        bangalorePublicLibrary.addBook(new Book("Learn Java", "John", "1", 2010));
+        bangalorePublicLibrary.addBook(new Book("Learn Java", "John", "1", 2010));
 
         //Lend book to patron
-        bangalorePublicLibrary.lendBook(book1, patron1);
+        bangalorePublicLibrary.lendBook("1", patron1);
+        bangalorePublicLibrary.lendBook("1", patron2);
     }
 }

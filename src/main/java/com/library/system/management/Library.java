@@ -3,9 +3,11 @@ package com.library.system.management;
 import com.library.system.books.Book;
 import com.library.system.patrons.Patron;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -15,37 +17,38 @@ public class Library {
 
     private String name;
 
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 
-    private List<Patron> patrons;
+    private List<Patron> patrons = new ArrayList<>();
 
-    private Map<Book, Integer> bookMap = new HashMap<>();
+    private Map<String, Integer> bookMap = new HashMap<>();
 
     public Library(int id, String name, List<Book> books, List<Patron> patrons) {
         this.id = id;
         this.name = name;
-        this.books = books;
-        this.patrons = patrons;
+        this.books.addAll(books);
+        this.patrons.addAll(patrons);
         populateBookToCountMap(books);
     }
 
     private void populateBookToCountMap(List<Book> books) {
         books.forEach(book -> {
-            if (bookMap.containsKey(book)) {
-                this.bookMap.computeIfPresent(book, (k, v) -> v + 1);
+            if (bookMap.containsKey(book.getIsbn())) {
+                this.bookMap.computeIfPresent(book.getIsbn(), (k, v) -> v + 1);
             } else {
-                this.bookMap.put(book, 1);
+                this.bookMap.put(book.getIsbn(), 1);
             }
         });
         displayBooks();
     }
 
     public void addBook(Book book) {
-        if (checkIfBookExists(book)) {
-            this.bookMap.computeIfPresent(book, (k, v) -> v + 1);
+        if (checkIfBookExists(book.getIsbn())) {
+            this.bookMap.computeIfPresent(book.getIsbn(), (k, v) -> v + 1);
         } else {
             populateBookToCountMap(List.of(book));
         }
+        this.books.add(book);
     }
 
     public void displayLibraryName() {
@@ -54,7 +57,13 @@ public class Library {
 
     public void displayBooks() {
         System.out.println("Books present in " + this.name + " are :");
-        System.out.println(bookMap);
+        bookMap.keySet().forEach(key -> {
+            var optionalBook = findBookByIsbn(key);
+            if (optionalBook.isPresent()) {
+                var book = optionalBook.get();
+                System.out.println(book + " having count : " + bookMap.get(book.getIsbn()));
+            }
+        });
         System.out.println("*************************");
     }
 
@@ -64,17 +73,35 @@ public class Library {
         System.out.println("*************************");
     }
 
-    public void lendBook(Book book, Patron patron) {
-        if (patron.getBorrowedBooks().contains(book)) {
-            System.out.println("Patron already has the book");
-        } else if (checkIfBookExists(book)) {
+    public void lendBook(String isbn, Patron patron) {
+        if (checkIfBookExists(isbn)) {
+            var book = findBookByIsbn(isbn).get();
             patron.borrowBook(book);
-            this.bookMap.computeIfPresent(book, (k, v) -> v - 1);
+            this.bookMap.computeIfPresent(book.getIsbn(), (k, v) -> v - 1);
+            this.books.remove(book);
             displayBooks();
         }
     }
 
-    private boolean checkIfBookExists(Book book) {
-        return bookMap.getOrDefault(book, 0) > 0;
+    private Optional<Book> findBookByIsbn(String isbn) {
+        return this.books.stream()
+                .filter(b -> b.getIsbn().equalsIgnoreCase(isbn))
+                .findFirst();
+    }
+
+    private Optional<Book> findBookByAuthor(String author) {
+        return this.books.stream()
+                .filter(b -> b.getAuthor().equalsIgnoreCase(author))
+                .findFirst();
+    }
+
+    private Optional<Book> findBookByTitle(String title) {
+        return this.books.stream()
+                .filter(b -> b.getTitle().equalsIgnoreCase(title))
+                .findFirst();
+    }
+
+    private boolean checkIfBookExists(String isbn) {
+        return bookMap.getOrDefault(isbn, 0) > 0;
     }
 }
