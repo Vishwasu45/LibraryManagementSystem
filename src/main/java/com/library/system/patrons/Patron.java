@@ -19,21 +19,25 @@ public class Patron {
         this.name = name;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public List<Book> getBorrowedBooks() {
         return borrowedBooks;
     }
 
     public void borrowBook(Book book) {
         this.borrowedBooks.add(book);
-        this.displayBooksHeldByPatron();
+        this.displayBooksBorrowedByPatron();
     }
 
     public void returnBook(Book book) {
         this.borrowedBooks.remove(book);
-        this.displayBooksHeldByPatron();
+        this.displayBooksBorrowedByPatron();
     }
 
-    private void displayBooksHeldByPatron() {
+    public void displayBooksBorrowedByPatron() {
         System.out.println(this.name + " has these books : ");
         this.borrowedBooks.forEach(borrowed -> System.out.println(borrowed.toString()));
         System.out.println("*************************");
