@@ -10,9 +10,18 @@ public class LibraryAssociation {
 
     Scanner sc = new Scanner(System.in);
 
+    private static LibraryAssociation instance = null;
+
     private List<Library> libraryList = new ArrayList<>();
 
-    public LibraryAssociation() {}
+    private LibraryAssociation() {}
+
+    public static LibraryAssociation getInstance() {
+        if (instance == null) {
+            instance = new LibraryAssociation();
+        }
+        return instance;
+    }
 
     public LibraryAssociation(List<Library> libraryList) {
         this.libraryList = libraryList;
